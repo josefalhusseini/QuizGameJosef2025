@@ -17,6 +17,8 @@ namespace QuizGameJosef2025
     /// <summary>
     /// Interaction logic for MainQuiz.xaml
     /// </summary>
+    /// 
+    //testar en commit
     public partial class MainQuiz : Window
     {
         public MainQuiz()
