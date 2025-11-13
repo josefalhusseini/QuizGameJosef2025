@@ -8,22 +8,37 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
 
-        <TextBlock Text="Welcome to Quiz Game Josef 2025!" 
-                   HorizontalAlignment="Center" 
-                   VerticalAlignment="Top" 
-                   FontSize="24" 
-                   FontWeight="Bold" RenderTransformOrigin="0.500,-1.015" Margin="0,115,0,0"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <TextBlock x:Name="QuestionText"
+                   Grid.Row="0"
+                   FontSize="24"
+                   HorizontalAlignment="Center"
+                   Margin="0,20,0,20"/>
 
-        <Button Content="Start Quiz" 
-                HorizontalAlignment="Center" 
-                VerticalAlignment="Center" 
-                Width="150" 
-                Height="50" 
-                FontSize="16" 
-                Click="StartQuizButton_Click"/>
+        <StackPanel Grid.Row="1" Margin="20">
+            <RadioButton x:Name="A1" FontSize="18" Margin="0,5"/>
+            <RadioButton x:Name="A2" FontSize="18" Margin="0,5"/>
+            <RadioButton x:Name="A3" FontSize="18" Margin="0,5"/>
+        </StackPanel>
 
-
-
-
+        <StackPanel Grid.Row="2"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Margin="0,20,0,20">
+            <Button x:Name="NextButton"
+                    Content="Nästa"
+                    Width="120"
+                    Margin="0,0,20,0"
+                    Click="NextButton_Click"/>
+            <TextBlock x:Name="ScoreText"
+                       FontSize="16"
+                       VerticalAlignment="Center"/>
+        </StackPanel>
     </Grid>
 </Window>
+

@@ -11,23 +11,81 @@ using System.Windows.Shapes;
 
 namespace QuizGameJosef2025
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        private List<Question> questions;
+        private int index;
+        private int correct;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            questions = new List<Question>
+            {
+                new Question(
+                    "Vad är 2 + 2?",
+                    new List<string> { "3", "4", "5" },
+                    1),
+                new Question(
+                    "Vilken färg har himlen oftast?",
+                    new List<string> { "Blå", "Grön", "Röd" },
+                    0)
+            };
+
+            index = 0;
+            correct = 0;
+
+            ShowQuestion();
         }
 
-        private void StartQuizButton_Click(object sender, RoutedEventArgs e)
+        private void ShowQuestion()
         {
-            MainQuiz mainQuizWindow = new MainQuiz();
-            mainQuizWindow.Show();
-            this.Close();
+            var q = questions[index];
+
+            QuestionText.Text = q.Text;
+            A1.Content = q.Answers[0];
+            A2.Content = q.Answers[1];
+            A3.Content = q.Answers[2];
+
+            A1.IsChecked = false;
+            A2.IsChecked = false;
+            A3.IsChecked = false;
+
+            ScoreText.Text = $"Rätt: {correct} / {index}";
         }
 
+        private void NextButton_Click(object sender, RoutedEventArgs e)
+        {
+            int selected = -1;
 
+            if (A1.IsChecked == true) selected = 0;
+            else if (A2.IsChecked == true) selected = 1;
+            else if (A3.IsChecked == true) selected = 2;
+
+            if (selected == -1)
+            {
+                MessageBox.Show("Välj ett svar.");
+                return;
+            }
+
+            var q = questions[index];
+
+            if (selected == q.CorrectIndex)
+                correct++;
+
+            index++;
+
+            if (index < questions.Count)
+            {
+                ShowQuestion();
+            }
+            else
+            {
+                double percent = 100.0 * correct / questions.Count;
+                MessageBox.Show($"Klart! Du fick {correct} av {questions.Count} ({percent:0}%).");
+                NextButton.IsEnabled = false;
+            }
+        }
     }
 }
