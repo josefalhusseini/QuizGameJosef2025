@@ -16,28 +16,34 @@ namespace QuizGameJosef2025
         private List<Question> questions;
         private int index;
         private int correct;
+        private readonly Random rng; // Changed from object to Random
 
         public MainWindow()
         {
             InitializeComponent();
 
+            rng = new Random(); // Initialize rng
+
             questions = new List<Question>
-            {
-                new Question(
-                    "Vad är 2 + 2?",
-                    new List<string> { "3", "4", "5" },
-                    1),
-                new Question(
-                    "Vilken färg har himlen oftast?",
-                    new List<string> { "Blå", "Grön", "Röd" },
-                    0)
-            };
+    {
+        new Question(
+            "Vad är 2 + 2?",
+            new List<string> { "3", "4", "5" },
+            1),
+        new Question(
+            "Vilken färg har himlen oftast?",
+            new List<string> { "Blå", "Grön", "Röd" },
+            0)
+    };
+
+            questions = questions.OrderBy(q => rng.Next()).ToList();
 
             index = 0;
             correct = 0;
 
             ShowQuestion();
         }
+
         private double GetPercent()
         {
             if (index == 0) return 0;
@@ -90,7 +96,7 @@ namespace QuizGameJosef2025
             else
             {
                 double percent = 100.0 * correct / questions.Count;
-                MessageBox.Show($"Klart! Du fick {correct} av {questions.Count} ({percent:0}%).");
+                MessageBox.Show($"Grattis! Du fick {correct} av {questions.Count} ({percent:0}%).");
                 NextButton.IsEnabled = false;
             }
 
