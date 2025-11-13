@@ -1,42 +1,38 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace QuizGameJosef2025
 {
     public partial class MainWindow : Window
     {
-        private List<Question> questions;
+        private Quiz currentQuiz;
         private int index;
         private int correct;
-        private readonly Random rng; // Changed from object to Random
+        private readonly System.Random rng = new System.Random();
 
         public MainWindow()
         {
             InitializeComponent();
 
-            rng = new Random(); // Initialize rng
+            currentQuiz = new Quiz(
+                "Standardquiz",
+                new List<Question>
+                {
+                    new Question(
+                        "Vad är 2 + 2?",
+                        new List<string> { "3", "4", "5" },
+                        1),
+                    new Question(
+                        "Vilken färg har himlen oftast?",
+                        new List<string> { "Blå", "Grön", "Röd" },
+                        0)
+                }
+            );
 
-            questions = new List<Question>
-    {
-        new Question(
-            "Vad är 2 + 2?",
-            new List<string> { "3", "4", "5" },
-            1),
-        new Question(
-            "Vilken färg har himlen oftast?",
-            new List<string> { "Blå", "Grön", "Röd" },
-            0)
-    };
-
-            questions = questions.OrderBy(q => rng.Next()).ToList();
+            currentQuiz.Questions = currentQuiz.Questions
+                .OrderBy(q => rng.Next())
+                .ToList();
 
             index = 0;
             correct = 0;
@@ -44,16 +40,9 @@ namespace QuizGameJosef2025
             ShowQuestion();
         }
 
-        private double GetPercent()
-        {
-            if (index == 0) return 0;
-            return 100.0 * correct / index;
-        }
-
-
         private void ShowQuestion()
         {
-            var q = questions[index];
+            var q = currentQuiz.Questions[index];
 
             QuestionText.Text = q.Text;
             A1.Content = q.Answers[0];
@@ -65,7 +54,12 @@ namespace QuizGameJosef2025
             A3.IsChecked = false;
 
             ScoreText.Text = $"Rätt: {correct} / {index} ({GetPercent():0}%)";
+        }
 
+        private double GetPercent()
+        {
+            if (index == 0) return 0;
+            return 100.0 * correct / index;
         }
 
         private void NextButton_Click(object sender, RoutedEventArgs e)
@@ -82,25 +76,45 @@ namespace QuizGameJosef2025
                 return;
             }
 
-            var q = questions[index];
+            var q = currentQuiz.Questions[index];
 
             if (selected == q.CorrectIndex)
                 correct++;
 
             index++;
 
-            if (index < questions.Count)
+            if (index < currentQuiz.Questions.Count)
             {
                 ShowQuestion();
             }
             else
             {
-                double percent = 100.0 * correct / questions.Count;
-                MessageBox.Show($"Grattis! Du fick {correct} av {questions.Count} ({percent:0}%).");
+                double percent = 100.0 * correct / currentQuiz.Questions.Count;
+                MessageBox.Show($"Klart! Du fick {correct} av {currentQuiz.Questions.Count} ({percent:0}%).");
                 NextButton.IsEnabled = false;
             }
-
-
         }
+
+        private void SaveQuiz_Click(object sender, RoutedEventArgs e)
+        {
+            QuizFileHandler.SaveQuiz(currentQuiz);
+        }
+
+        private void LoadQuiz_Click(object sender, RoutedEventArgs e)
+        {
+            var loaded = QuizFileHandler.LoadQuiz(currentQuiz.Name);
+            if (loaded == null)
+            {
+                MessageBox.Show("Ingen sparad quiz hittades.");
+                return;
+            }
+
+            currentQuiz = loaded;
+            index = 0;
+            correct = 0;
+            ShowQuestion();
+        }
+
     }
 }
+
