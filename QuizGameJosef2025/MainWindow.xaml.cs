@@ -38,6 +38,12 @@ namespace QuizGameJosef2025
 
             ShowQuestion();
         }
+        private double GetPercent()
+        {
+            if (index == 0) return 0;
+            return 100.0 * correct / index;
+        }
+
 
         private void ShowQuestion()
         {
@@ -52,7 +58,8 @@ namespace QuizGameJosef2025
             A2.IsChecked = false;
             A3.IsChecked = false;
 
-            ScoreText.Text = $"Rätt: {correct} / {index}";
+            ScoreText.Text = $"Rätt: {correct} / {index} ({GetPercent():0}%)";
+
         }
 
         private void NextButton_Click(object sender, RoutedEventArgs e)
@@ -86,6 +93,8 @@ namespace QuizGameJosef2025
                 MessageBox.Show($"Klart! Du fick {correct} av {questions.Count} ({percent:0}%).");
                 NextButton.IsEnabled = false;
             }
+
+
         }
     }
 }
