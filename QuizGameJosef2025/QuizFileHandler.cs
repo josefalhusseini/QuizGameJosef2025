@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace QuizGameJosef2025
 {
@@ -27,19 +25,20 @@ namespace QuizGameJosef2025
             return Path.Combine(GetFolder(), quizName + ".json");
         }
 
-        public static void SaveQuiz(Quiz quiz)
+        public static async Task SaveQuizAsync(Quiz quiz)
         {
             var options = new JsonSerializerOptions { WriteIndented = true };
             string json = JsonSerializer.Serialize(quiz, options);
-            File.WriteAllText(GetPath(quiz.Name), json);
+            string path = GetPath(quiz.Name);
+            await File.WriteAllTextAsync(path, json);
         }
 
-        public static Quiz LoadQuiz(string quizName)
+        public static async Task<Quiz> LoadQuizAsync(string quizName)
         {
             string path = GetPath(quizName);
             if (!File.Exists(path)) return null;
 
-            string json = File.ReadAllText(path);
+            string json = await File.ReadAllTextAsync(path);
             return JsonSerializer.Deserialize<Quiz>(json);
         }
     }

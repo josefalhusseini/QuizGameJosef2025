@@ -28,7 +28,7 @@
 
 
 
-        
+
         <StackPanel Grid.Row="2"
             Orientation="Horizontal"
             HorizontalAlignment="Center"
@@ -42,6 +42,10 @@
             Width="120"
             Margin="0,0,20,0"
             Click="CreateQuiz_Click"/>
+            <Button Content="Redigera Quiz"
+            Width="120"
+            Margin="0,0,20,0"
+            Click="EditQuiz_Click"/>
             <Button Content="Spara Quiz"
             Width="120"
             Margin="0,0,20,0"
@@ -54,6 +58,7 @@
                FontSize="16"
                VerticalAlignment="Center"/>
         </StackPanel>
+
 
     </Grid>
 </Window>

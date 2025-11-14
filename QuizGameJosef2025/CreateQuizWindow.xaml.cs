@@ -51,7 +51,7 @@ namespace QuizGameJosef2025
             }
         }
 
-        private void SaveQuiz_Click(object sender, RoutedEventArgs e)
+        private async void SaveQuiz_Click(object sender, RoutedEventArgs e)
         {
             string name = string.IsNullOrWhiteSpace(QuizNameTextBox.Text)
                 ? "NyttQuiz"
@@ -63,8 +63,8 @@ namespace QuizGameJosef2025
                 return;
             }
 
-            var quiz = new Quiz(name, questions);
-            QuizFileHandler.SaveQuiz(quiz);
+            var quiz = new Quiz(name, new List<Question>(questions));
+            await QuizFileHandler.SaveQuizAsync(quiz);
             MessageBox.Show("Quiz sparat.");
             Close();
         }

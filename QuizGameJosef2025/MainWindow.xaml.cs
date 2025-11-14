@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
+
 
 namespace QuizGameJosef2025
 {
@@ -95,14 +97,15 @@ namespace QuizGameJosef2025
             }
         }
 
-        private void SaveQuiz_Click(object sender, RoutedEventArgs e)
+        private async void SaveQuiz_Click(object sender, RoutedEventArgs e)
         {
-            QuizFileHandler.SaveQuiz(currentQuiz);
+            await QuizFileHandler.SaveQuizAsync(currentQuiz);
+            MessageBox.Show("Quiz sparat.");
         }
 
-        private void LoadQuiz_Click(object sender, RoutedEventArgs e)
+        private async void LoadQuiz_Click(object sender, RoutedEventArgs e)
         {
-            var loaded = QuizFileHandler.LoadQuiz(currentQuiz.Name);
+            var loaded = await QuizFileHandler.LoadQuizAsync(currentQuiz.Name);
             if (loaded == null)
             {
                 MessageBox.Show("Ingen sparad quiz hittades.");
@@ -115,11 +118,19 @@ namespace QuizGameJosef2025
             ShowQuestion();
         }
 
+
         private void CreateQuiz_Click(object sender, RoutedEventArgs e)
         {
             var window = new CreateQuizWindow();
             window.Show();
         }
+
+        private void EditQuiz_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new EditQuizWindow();
+            window.Show();
+        }
+
 
 
     }
