@@ -115,6 +115,13 @@ namespace QuizGameJosef2025
             ShowQuestion();
         }
 
+        private void CreateQuiz_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new CreateQuizWindow();
+            window.Show();
+        }
+
+
     }
 }
 
