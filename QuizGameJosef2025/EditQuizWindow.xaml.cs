@@ -95,8 +95,14 @@ namespace QuizGameJosef2025
                 return;
             }
 
+            if (!string.IsNullOrWhiteSpace(QuizNameTextBox.Text))
+            {
+                currentQuiz.Name = QuizNameTextBox.Text;
+            }
+
             await QuizFileHandler.SaveQuizAsync(currentQuiz);
             MessageBox.Show("Quiz sparat.");
         }
+
     }
 }

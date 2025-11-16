@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
-
 
 namespace QuizGameJosef2025
 {
@@ -22,15 +20,57 @@ namespace QuizGameJosef2025
                 new List<Question>
                 {
                     new Question(
-                        "Vad är 2 + 2?",
-                        new List<string> { "3", "4", "5" },
-                        1),
+                        "Vem kallas ofta 'kungen av pop'?",
+                        new List<string> { "Michael Jackson", "Elvis Presley", "Prince" },
+                        0),
                     new Question(
-                        "Vilken färg har himlen oftast?",
-                        new List<string> { "Blå", "Grön", "Röd" },
+                        "Har en svensk någonsin varit i rymden?",
+                        new List<string> { "Ja", "Nej", "Bara i filmer" },
+                        0),
+                    new Question(
+                        "Vad är ungefär roten ur pi?",
+                        new List<string> { "1,77", "3,14", "1,41" },
+                        0),
+                    new Question(
+                        "Vad heter vår galax?",
+                        new List<string> { "Vintergatan", "Andromedagalaxen", "Orionbältet" },
+                        0),
+                    new Question(
+                        "Vilken planet kallas den röda planeten?",
+                        new List<string> { "Mars", "Jupiter", "Venus" },
+                        0),
+                    new Question(
+                        "Vilken stad är Sveriges huvudstad?",
+                        new List<string> { "Stockholm", "Göteborg", "Malmö" },
+                        0),
+                    new Question(
+                        "Vad heter Sveriges högsta fjäll?",
+                        new List<string> { "Kebnekaise", "Mount Everest", "Åreskutan" },
+                        0),
+                    new Question(
+                        "Vilken färg har det gula i svenska flaggan?",
+                        new List<string> { "Gul", "Vit", "Orange" },
+                        0),
+                    new Question(
+                        "I vilken stad utspelar sig tv-serien 'Friends'?",
+                        new List<string> { "New York", "Los Angeles", "London" },
+                        0),
+                    new Question(
+                        "Vad heter den lilla gröna jedimästaren i Star Wars?",
+                        new List<string> { "Yoda", "Grogu", "Luke" },
+                        0),
+                    new Question(
+                        "Vad heter trollkarlsskolan i Harry Potter?",
+                        new List<string> { "Hogwarts", "Durmstrang", "Beauxbatons" },
+                        0),
+                    new Question(
+                        "Vilken streamingtjänst är känd för serien 'Stranger Things'?",
+                        new List<string> { "Netflix", "Disney+", "HBO Max" },
                         0)
                 }
             );
+
+            QuizNameTextBox.Text = currentQuiz.Name;
 
             currentQuiz.Questions = currentQuiz.Questions
                 .OrderBy(q => rng.Next())
@@ -99,25 +139,43 @@ namespace QuizGameJosef2025
 
         private async void SaveQuiz_Click(object sender, RoutedEventArgs e)
         {
+            if (!string.IsNullOrWhiteSpace(QuizNameTextBox.Text))
+                currentQuiz.Name = QuizNameTextBox.Text;
+
             await QuizFileHandler.SaveQuizAsync(currentQuiz);
-            MessageBox.Show("Quiz sparat.");
+            MessageBox.Show("Quiz sparat som: " + currentQuiz.Name);
         }
 
         private async void LoadQuiz_Click(object sender, RoutedEventArgs e)
         {
-            var loaded = await QuizFileHandler.LoadQuizAsync(currentQuiz.Name);
+            string name = QuizNameTextBox.Text;
+
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                MessageBox.Show(
+                    "För att ladda ett quiz måste du skriva in quiz-namnet i rutan högst upp.\n\n" +
+                    "Exempel: Om quizet sparades som 'MittQuiz', skriv in exakt det namnet."
+                );
+                return;
+            }
+
+            var loaded = await QuizFileHandler.LoadQuizAsync(name);
+
             if (loaded == null)
             {
-                MessageBox.Show("Ingen sparad quiz hittades.");
+                MessageBox.Show(
+                    "Kunde inte hitta quiz med namnet: " + name +
+                    "\n\nKontrollera stavningen och försök igen."
+                );
                 return;
             }
 
             currentQuiz = loaded;
             index = 0;
             correct = 0;
+            NextButton.IsEnabled = true;
             ShowQuestion();
         }
-
 
         private void CreateQuiz_Click(object sender, RoutedEventArgs e)
         {
@@ -130,9 +188,5 @@ namespace QuizGameJosef2025
             var window = new EditQuizWindow();
             window.Show();
         }
-
-
-
     }
 }
-

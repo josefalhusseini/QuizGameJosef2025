@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace QuizGameJosef2025
 {
@@ -10,6 +6,11 @@ namespace QuizGameJosef2025
     {
         public string Name { get; set; }
         public List<Question> Questions { get; set; }
+
+        public Quiz()
+        {
+            Questions = new List<Question>();
+        }
 
         public Quiz(string name, List<Question> questions)
         {

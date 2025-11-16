@@ -53,9 +53,13 @@ namespace QuizGameJosef2025
 
         private async void SaveQuiz_Click(object sender, RoutedEventArgs e)
         {
-            string name = string.IsNullOrWhiteSpace(QuizNameTextBox.Text)
-                ? "NyttQuiz"
-                : QuizNameTextBox.Text;
+            string name = QuizNameTextBox.Text;
+
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                MessageBox.Show("Skriv in ett namn på quizet.");
+                return;
+            }
 
             if (questions.Count == 0)
             {
@@ -64,9 +68,12 @@ namespace QuizGameJosef2025
             }
 
             var quiz = new Quiz(name, new List<Question>(questions));
+
             await QuizFileHandler.SaveQuizAsync(quiz);
-            MessageBox.Show("Quiz sparat.");
+
+            MessageBox.Show("Quiz sparat som: " + name);
             Close();
         }
+
     }
 }

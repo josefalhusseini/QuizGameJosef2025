@@ -8,6 +8,11 @@ namespace QuizGameJosef2025
         public List<string> Answers { get; set; }
         public int CorrectIndex { get; set; }
 
+        public Question()
+        {
+            Answers = new List<string>();
+        }
+
         public Question(string text, List<string> answers, int correctIndex)
         {
             Text = text;
